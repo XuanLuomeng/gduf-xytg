@@ -1,4 +1,4 @@
-package com.gduf.xytg.acl.service;
+package com.gduf.xytg.acl.controll;
 
 import cn.gduf.xytg.common.result.Result;
 import io.swagger.annotations.Api;
