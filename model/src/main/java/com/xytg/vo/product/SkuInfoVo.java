@@ -4,7 +4,6 @@ import com.xytg.model.product.SkuAttrValue;
 import com.xytg.model.product.SkuImage;
 import com.xytg.model.product.SkuInfo;
 import com.xytg.model.product.SkuPoster;
-import xytg.model.product.*;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 
