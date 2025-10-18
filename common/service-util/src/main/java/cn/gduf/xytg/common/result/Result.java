@@ -44,6 +44,30 @@ public class Result<T> {
     }
 
     /**
+     * 构建返回结果
+     *
+     * @param data
+     * @param code
+     * @param message
+     * @param <T>
+     * @return
+     */
+    public static <T> Result<T> build(T data, Integer code, String message) {
+        // 创建Result对象
+        Result<T> result = new Result<>();
+        // 判断是否需要设置数据
+        if (data != null) {
+            result.setData(data);
+        }
+        // 设置其他数据
+        result.setCode(code);
+        result.setMessage(message);
+
+        // 返回
+        return result;
+    }
+
+    /**
      * 成功返回的数据
      *
      * @param data

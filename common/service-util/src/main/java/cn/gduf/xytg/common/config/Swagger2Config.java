@@ -51,6 +51,8 @@ public class Swagger2Config {
                 .apiInfo(webApiInfo())
                 .select()
                 .apis(RequestHandlerSelectors.basePackage("cn.gduf.xytg"))
+                //只显示api路径下的页面
+                // /api/user/login
                 .paths(PathSelectors.regex("/api/.*"))
                 .build()
                 .globalOperationParameters(parameters);
