@@ -13,5 +13,6 @@ import com.gduf.xytg.vo.acl.RoleQueryVo;
  * @date 2025/10/18 22:46
  */
 public interface RoleService extends IService<Role> {
+    //1 角色列表（条件分页查询）
     IPage<Role> selectRolePage(Page<Role> page, RoleQueryVo roleQueryVo);
 }
