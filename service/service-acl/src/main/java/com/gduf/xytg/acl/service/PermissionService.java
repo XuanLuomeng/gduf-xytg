@@ -4,6 +4,7 @@ import com.baomidou.mybatisplus.extension.service.IService;
 import com.gduf.xytg.model.acl.Permission;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * @author LuoXuanwei
@@ -26,4 +27,21 @@ public interface PermissionService extends IService<Permission> {
      * @return
      */
     boolean removeChildById(Long id);
+
+    /**
+     * 根据角色id获取角色菜单
+     *
+     * @param roleId
+     * @return
+     */
+    Map<String, Object> getPermissionByRoleId(Long roleId);
+
+    /**
+     * 为角色分配菜单
+     *
+     * @param roleId
+     * @param permissionId
+     * @return
+     */
+    boolean saveRolePermission(String roleId, String[] permissionId);
 }
