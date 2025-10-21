@@ -6,6 +6,8 @@ import com.baomidou.mybatisplus.extension.service.IService;
 import com.gduf.xytg.model.acl.Role;
 import com.gduf.xytg.vo.acl.RoleQueryVo;
 
+import java.util.Map;
+
 /**
  * @author LuoXuanwei
  * @version 1.0
@@ -13,6 +15,18 @@ import com.gduf.xytg.vo.acl.RoleQueryVo;
  * @date 2025/10/18 22:46
  */
 public interface RoleService extends IService<Role> {
-    //1 角色列表（条件分页查询）
+    /**
+     * 角色列表（条件分页查询）
+     */
     IPage<Role> selectRolePage(Page<Role> page, RoleQueryVo roleQueryVo);
+
+    /**
+     * 获取所有角色，和根据用户id查询用户分配角色列表
+     */
+    Map<String, Object> getRoleByAdminId(Long adminId);
+
+    /**
+     * 为用户进行分配
+     */
+    boolean saveAdminRole(Long adminId, Long[] roleIds);
 }

@@ -4,6 +4,7 @@ import cn.gduf.xytg.common.result.Result;
 import cn.gduf.xytg.common.utils.MD5;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.gduf.xytg.acl.service.AdminRoleService;
 import com.gduf.xytg.acl.service.AdminService;
 import com.gduf.xytg.acl.service.RoleService;
 import com.gduf.xytg.model.acl.Admin;
@@ -11,9 +12,11 @@ import com.gduf.xytg.vo.acl.AdminQueryVo;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * @author LuoXuanwei
@@ -30,7 +33,43 @@ public class AdminController {
     private AdminService adminService;
 
     @Autowired
-    private RoleService roleService;
+    RoleService roleService;
+
+    @Autowired
+    private AdminRoleService adminRoleService;
+
+    /**
+     * 为用户进行角色分配
+     *
+     * @param adminId
+     * @param roleIdList
+     * @return
+     */
+    @ApiOperation("为用户进行角色分配")
+    @PostMapping("doAssign")
+    public Result doAssign(@RequestParam Long adminId,
+                           @RequestBody Long[] roleIdList) {
+        boolean result = roleService.saveAdminRole(adminId, roleIdList);
+        if (result) {
+            return Result.ok(null);
+        } else {
+            return Result.fail(null);
+        }
+    }
+
+    /**
+     * 获取所有角色，和根据用户id查询用户分配角色列表
+     *
+     * @param adminId
+     * @return
+     */
+    @ApiOperation("获取用户角色")
+    @GetMapping("toAssign/{adminId}")
+    public Result toAssign(@PathVariable Long adminId) {
+        // 返回map集合包含两部分数据：所有角色 和 为用户分配角色列表
+        Map<String, Object> resultMap = roleService.getRoleByAdminId(adminId);
+        return Result.ok(resultMap);
+    }
 
     /**
      * 用户列表
@@ -45,7 +84,7 @@ public class AdminController {
     public Result list(@PathVariable Long current,
                        @PathVariable Long limit,
                        AdminQueryVo adminQueryVo) {
-        Page<Admin> pageParam = new Page<Admin>(current, limit);
+        Page<Admin> pageParam = new Page<>(current, limit);
 
         IPage<Admin> pageModel = adminService.selectPageUser(pageParam, adminQueryVo);
 
@@ -105,6 +144,18 @@ public class AdminController {
     @ApiOperation("修改用户")
     @PutMapping("update")
     public Result update(@RequestBody Admin admin) {
+        // 判断密码是否为空，不为空则进行密码加密
+        if (!StringUtils.isEmpty(admin.getPassword())) {
+            // 获取原密码用于密码加密
+            String password = admin.getPassword();
+
+            // 密码加密
+            String md5Password = MD5.encrypt(password);
+
+            // 获取加密后的密码
+            admin.setPassword(md5Password);
+        }
+
         boolean update = adminService.updateById(admin);
         if (update) {
             return Result.ok(null);
