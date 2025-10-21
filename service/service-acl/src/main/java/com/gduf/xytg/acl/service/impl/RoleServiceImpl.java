@@ -112,7 +112,7 @@ public class RoleServiceImpl extends ServiceImpl<RoleMapper, Role> implements Ro
         // 删除用户已经分配过的角色数据
         LambdaQueryWrapper<AdminRole> wrapper = new LambdaQueryWrapper<>();
         wrapper.eq(AdminRole::getAdminId, adminId);
-        adminRoleService.remove(wrapper);
+        boolean remove = adminRoleService.remove(wrapper);
 
         // 重新分配
         List<AdminRole> list = new ArrayList<>();
@@ -124,6 +124,8 @@ public class RoleServiceImpl extends ServiceImpl<RoleMapper, Role> implements Ro
             list.add(adminRole);
         }
 
-        return adminRoleService.saveBatch(list);
+        boolean saveBatch = adminRoleService.saveBatch(list);
+
+        return remove && saveBatch;
     }
 }
