@@ -1,7 +1,7 @@
 package cn.gduf.xytg.sys.service;
 
 import com.baomidou.mybatisplus.extension.service.IService;
-import com.gduf.xytg.model.sys.Region;
+import cn.gduf.xytg.model.sys.Region;
 
 import java.util.List;
 

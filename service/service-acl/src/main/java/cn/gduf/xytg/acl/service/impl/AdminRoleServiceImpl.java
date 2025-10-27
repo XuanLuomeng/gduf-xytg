@@ -3,7 +3,7 @@ package com.gduf.xytg.acl.service.impl;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.gduf.xytg.acl.mapper.AdminRoleMapper;
 import com.gduf.xytg.acl.service.AdminRoleService;
-import com.gduf.xytg.model.acl.AdminRole;
+import cn.gduf.xytg.model.acl.AdminRole;
 import org.springframework.stereotype.Service;
 
 /**

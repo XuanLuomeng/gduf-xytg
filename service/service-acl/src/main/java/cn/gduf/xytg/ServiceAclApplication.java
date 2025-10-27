@@ -2,6 +2,7 @@ package cn.gduf.xytg;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.cloud.client.discovery.EnableDiscoveryClient;
 
 /**
  * @author LuoXuanwei
@@ -10,6 +11,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
  * @date 2025/10/18 22:22
  */
 @SpringBootApplication
+@EnableDiscoveryClient
 public class ServiceAclApplication {
 
     public static void main(String[] args) {

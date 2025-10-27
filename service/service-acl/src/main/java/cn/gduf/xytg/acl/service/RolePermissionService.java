@@ -1,7 +1,7 @@
 package com.gduf.xytg.acl.service;
 
 import com.baomidou.mybatisplus.extension.service.IService;
-import com.gduf.xytg.model.acl.RolePermission;
+import cn.gduf.xytg.model.acl.RolePermission;
 
 /**
  * @author LuoXuanwei

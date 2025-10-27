@@ -1,7 +1,7 @@
 package cn.gduf.xytg.sys.mapper;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
-import com.gduf.xytg.model.sys.RegionWare;
+import cn.gduf.xytg.model.sys.RegionWare;
 import org.springframework.stereotype.Repository;
 
 /**

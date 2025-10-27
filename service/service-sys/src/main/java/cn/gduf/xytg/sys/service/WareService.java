@@ -3,8 +3,8 @@ package cn.gduf.xytg.sys.service;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.IService;
-import com.gduf.xytg.model.sys.Ware;
-import com.gduf.xytg.vo.product.WareQueryVo;
+import cn.gduf.xytg.model.sys.Ware;
+import cn.gduf.xytg.vo.product.WareQueryVo;
 
 /**
  * @author LuoXuanwei

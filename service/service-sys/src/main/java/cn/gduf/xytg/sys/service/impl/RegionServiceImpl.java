@@ -4,10 +4,9 @@ import cn.gduf.xytg.sys.mapper.RegionMapper;
 import cn.gduf.xytg.sys.service.RegionService;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import com.gduf.xytg.model.sys.Region;
+import cn.gduf.xytg.model.sys.Region;
 import org.springframework.stereotype.Service;
 
-import java.util.Collections;
 import java.util.List;
 
 /**

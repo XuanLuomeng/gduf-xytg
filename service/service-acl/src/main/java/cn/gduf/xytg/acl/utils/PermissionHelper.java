@@ -1,6 +1,6 @@
 package com.gduf.xytg.acl.utils;
 
-import com.gduf.xytg.model.acl.Permission;
+import cn.gduf.xytg.model.acl.Permission;
 
 import java.util.ArrayList;
 import java.util.List;

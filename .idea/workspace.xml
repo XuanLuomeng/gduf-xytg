@@ -1,0 +1,520 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="AutoImportSettings">
+    <option name="autoReloadType" value="SELECTIVE" />
+  </component>
+  <component name="ChangeListManager">
+    <list default="true" id="f4a38ed7-8ee8-4c4b-9b6a-00334d270fe6" name="Changes" comment="049-移除配置文件中包含敏感信息导致无法将项目代码提交到GitHub中" />
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="FxmlFile" />
+        <option value="Interface" />
+        <option value="Class" />
+      </list>
+    </option>
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="MavenImportPreferences">
+    <option name="generalSettings">
+      <MavenGeneralSettings>
+        <option name="customMavenHome" value="$PROJECT_DIR$/../../JavaWeb/apache-maven-3.6.3" />
+        <option name="localRepository" value="E:\JavaWeb\maven\repository" />
+        <option name="mavenHomeTypeForPersistence" value="CUSTOM" />
+        <option name="userSettingsFile" value="E:\JavaWeb\apache-maven-3.6.3\conf\settings.xml" />
+      </MavenGeneralSettings>
+    </option>
+  </component>
+  <component name="ProjectColorInfo">{
+  &quot;customColor&quot;: &quot;&quot;,
+  &quot;associatedIndex&quot;: 2
+}</component>
+  <component name="ProjectId" id="34CDs95yKIWJ4AIZON7DJw3zTfW" />
+  <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "Maven.gduf-xytg-parent [clean].executor": "Run",
+    "Maven.service-activity [clean].executor": "Run",
+    "Maven.service-product [clean].executor": "Run",
+    "Maven.service-user-client [clean].executor": "Run",
+    "Maven.service-util [clean].executor": "Run",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "git-widget-placeholder": "master",
+    "kotlin-language-version-configured": "true",
+    "last_opened_file_path": "E:/java/gduf-xytg-parent/service/service-cart/src/main/resources",
+    "node.js.detected.package.eslint": "true",
+    "node.js.detected.package.tslint": "true",
+    "node.js.selected.package.eslint": "(autodetect)",
+    "node.js.selected.package.tslint": "(autodetect)",
+    "nodejs_package_manager_path": "npm",
+    "project.structure.last.edited": "Project",
+    "project.structure.proportion": "0.15",
+    "project.structure.side.proportion": "0.2",
+    "settings.editor.selected.configurable": "terminal",
+    "vue.rearranger.settings.migration": "true"
+  }
+}]]></component>
+  <component name="RecentsManager">
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="E:\java\gduf-xytg-parent\service\service-cart\src\main\resources" />
+      <recent name="E:\java\gduf-xytg-parent\service\service-search\src\main\resources" />
+      <recent name="E:\java\gduf-xytg-parent\common\service-util\src\main\resources" />
+      <recent name="E:\java\gduf-xytg-parent\service\service-product\src\main\resources" />
+      <recent name="E:\java\gduf-xytg-parent\service\service-sys\src\main\resources" />
+    </key>
+  </component>
+  <component name="RunManager">
+    <configuration default="true" type="JetRunConfigurationType">
+      <module name="common-util" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration default="true" type="KotlinStandaloneScriptRunConfigurationType">
+      <module name="common-util" />
+      <option name="filePath" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+  </component>
+  <component name="SharedIndexes">
+    <attachedChunks>
+      <set>
+        <option value="bundled-jdk-9f38398b9061-18abd8497189-intellij.indexing.shared.core-IU-241.14494.240" />
+        <option value="bundled-js-predefined-1d06a55b98c1-74d2a5396914-JavaScript-IU-241.14494.240" />
+      </set>
+    </attachedChunks>
+  </component>
+  <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="f4a38ed7-8ee8-4c4b-9b6a-00334d270fe6" name="Changes" comment="" />
+      <created>1760707815093</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1760707815093</updated>
+      <workItem from="1760707816147" duration="1042000" />
+      <workItem from="1760708867207" duration="60000" />
+      <workItem from="1760776803913" duration="24000" />
+      <workItem from="1760780329032" duration="9875000" />
+      <workItem from="1760860074886" duration="610000" />
+      <workItem from="1760939152126" duration="1238000" />
+      <workItem from="1760960694882" duration="5044000" />
+      <workItem from="1761021682832" duration="14625000" />
+      <workItem from="1761135621974" duration="10295000" />
+      <workItem from="1761145933779" duration="3952000" />
+      <workItem from="1761210321664" duration="22421000" />
+      <workItem from="1761318828887" duration="916000" />
+      <workItem from="1761376709875" duration="11058000" />
+      <workItem from="1761401111225" duration="33000" />
+      <workItem from="1761401161957" duration="3644000" />
+      <workItem from="1761455595221" duration="7803000" />
+      <workItem from="1761565267005" duration="9746000" />
+    </task>
+    <task id="LOCAL-00001" summary="001-项目基础模块构建">
+      <option name="closed" value="true" />
+      <created>1760708397607</created>
+      <option name="number" value="00001" />
+      <option name="presentableId" value="LOCAL-00001" />
+      <option name="project" value="LOCAL" />
+      <updated>1760708397607</updated>
+    </task>
+    <task id="LOCAL-00002" summary="005-优化全局异常管理器、Mybatis插件配置类、结果返回类和Swagger配置类">
+      <option name="closed" value="true" />
+      <created>1760794390064</created>
+      <option name="number" value="00002" />
+      <option name="presentableId" value="LOCAL-00002" />
+      <option name="project" value="LOCAL" />
+      <updated>1760794390064</updated>
+    </task>
+    <task id="LOCAL-00003" summary="006-编写项目公共实体类">
+      <option name="closed" value="true" />
+      <created>1760795214681</created>
+      <option name="number" value="00003" />
+      <option name="presentableId" value="LOCAL-00003" />
+      <option name="project" value="LOCAL" />
+      <updated>1760795214681</updated>
+    </task>
+    <task id="LOCAL-00004" summary="007-修复代码文件夹目录位置错误">
+      <option name="closed" value="true" />
+      <created>1760797439010</created>
+      <option name="number" value="00004" />
+      <option name="presentableId" value="LOCAL-00004" />
+      <option name="project" value="LOCAL" />
+      <updated>1760797439010</updated>
+    </task>
+    <task id="LOCAL-00005" summary="008-修复实体类导包目录错误">
+      <option name="closed" value="true" />
+      <created>1760797473417</created>
+      <option name="number" value="00005" />
+      <option name="presentableId" value="LOCAL-00005" />
+      <option name="project" value="LOCAL" />
+      <updated>1760797473417</updated>
+    </task>
+    <task id="LOCAL-00006" summary="009-创建权限管理模块yml配置文件">
+      <option name="closed" value="true" />
+      <created>1760797531840</created>
+      <option name="number" value="00006" />
+      <option name="presentableId" value="LOCAL-00006" />
+      <option name="project" value="LOCAL" />
+      <updated>1760797531840</updated>
+    </task>
+    <task id="LOCAL-00007" summary="010-复代码文件夹目录位置错误">
+      <option name="closed" value="true" />
+      <created>1760797630204</created>
+      <option name="number" value="00007" />
+      <option name="presentableId" value="LOCAL-00007" />
+      <option name="project" value="LOCAL" />
+      <updated>1760797630204</updated>
+    </task>
+    <task id="LOCAL-00008" summary="011-创建权限管理模块的登录接口">
+      <option name="closed" value="true" />
+      <created>1760798630717</created>
+      <option name="number" value="00008" />
+      <option name="presentableId" value="LOCAL-00008" />
+      <option name="project" value="LOCAL" />
+      <updated>1760798630717</updated>
+    </task>
+    <task id="LOCAL-00009" summary="012-移动登录接口文件到正确目录下">
+      <option name="closed" value="true" />
+      <created>1760798723261</created>
+      <option name="number" value="00009" />
+      <option name="presentableId" value="LOCAL-00009" />
+      <option name="project" value="LOCAL" />
+      <updated>1760798723261</updated>
+    </task>
+    <task id="LOCAL-00010" summary="013-添加数据库文件(数据+结构)">
+      <option name="closed" value="true" />
+      <created>1760967673588</created>
+      <option name="number" value="00010" />
+      <option name="presentableId" value="LOCAL-00010" />
+      <option name="project" value="LOCAL" />
+      <updated>1760967673588</updated>
+    </task>
+    <task id="LOCAL-00011" summary="014-添加角色管理模块">
+      <option name="closed" value="true" />
+      <created>1760967696406</created>
+      <option name="number" value="00011" />
+      <option name="presentableId" value="LOCAL-00011" />
+      <option name="project" value="LOCAL" />
+      <updated>1760967696406</updated>
+    </task>
+    <task id="LOCAL-00012" summary="015-添加MD5加密算法工具类">
+      <option name="closed" value="true" />
+      <created>1760969253368</created>
+      <option name="number" value="00012" />
+      <option name="presentableId" value="LOCAL-00012" />
+      <option name="project" value="LOCAL" />
+      <updated>1760969253368</updated>
+    </task>
+    <task id="LOCAL-00013" summary="016-用户服务接口修改注解">
+      <option name="closed" value="true" />
+      <created>1760969939885</created>
+      <option name="number" value="00013" />
+      <option name="presentableId" value="LOCAL-00013" />
+      <option name="project" value="LOCAL" />
+      <updated>1760969939885</updated>
+    </task>
+    <task id="LOCAL-00014" summary="017-实现用户管理接口">
+      <option name="closed" value="true" />
+      <created>1760969987386</created>
+      <option name="number" value="00014" />
+      <option name="presentableId" value="LOCAL-00014" />
+      <option name="project" value="LOCAL" />
+      <updated>1760969987386</updated>
+    </task>
+    <task id="LOCAL-00015" summary="018-实现用户角色管理服务">
+      <option name="closed" value="true" />
+      <created>1761043770969</created>
+      <option name="number" value="00015" />
+      <option name="presentableId" value="LOCAL-00015" />
+      <option name="project" value="LOCAL" />
+      <updated>1761043770969</updated>
+    </task>
+    <task id="LOCAL-00016" summary="019-实现菜单管理模块">
+      <option name="closed" value="true" />
+      <created>1761055855361</created>
+      <option name="number" value="00016" />
+      <option name="presentableId" value="LOCAL-00016" />
+      <option name="project" value="LOCAL" />
+      <updated>1761055855361</updated>
+    </task>
+    <task id="LOCAL-00017" summary="020-实现用户菜单功能">
+      <option name="closed" value="true" />
+      <created>1761057135630</created>
+      <option name="number" value="00017" />
+      <option name="presentableId" value="LOCAL-00017" />
+      <option name="project" value="LOCAL" />
+      <updated>1761057135630</updated>
+    </task>
+    <task id="LOCAL-00018" summary="021-修复目录路径错误导致spring扫描不到">
+      <option name="closed" value="true" />
+      <created>1761057549482</created>
+      <option name="number" value="00018" />
+      <option name="presentableId" value="LOCAL-00018" />
+      <option name="project" value="LOCAL" />
+      <updated>1761057549482</updated>
+    </task>
+    <task id="LOCAL-00019" summary="022-搭建区域管理模块环境和文件">
+      <option name="closed" value="true" />
+      <created>1761058463333</created>
+      <option name="number" value="00019" />
+      <option name="presentableId" value="LOCAL-00019" />
+      <option name="project" value="LOCAL" />
+      <updated>1761058463333</updated>
+    </task>
+    <task id="LOCAL-00020" summary="023-实现区域管理模块">
+      <option name="closed" value="true" />
+      <created>1761137997543</created>
+      <option name="number" value="00020" />
+      <option name="presentableId" value="LOCAL-00020" />
+      <option name="project" value="LOCAL" />
+      <updated>1761137997543</updated>
+    </task>
+    <task id="LOCAL-00021" summary="024-构建商品服务模块环境">
+      <option name="closed" value="true" />
+      <created>1761140190903</created>
+      <option name="number" value="00021" />
+      <option name="presentableId" value="LOCAL-00021" />
+      <option name="project" value="LOCAL" />
+      <updated>1761140190903</updated>
+    </task>
+    <task id="LOCAL-00022" summary="025-引入Minio框架">
+      <option name="closed" value="true" />
+      <created>1761145214163</created>
+      <option name="number" value="00022" />
+      <option name="presentableId" value="LOCAL-00022" />
+      <option name="project" value="LOCAL" />
+      <updated>1761145214163</updated>
+    </task>
+    <task id="LOCAL-00023" summary="026-实现商品管理模块">
+      <option name="closed" value="true" />
+      <created>1761214175173</created>
+      <option name="number" value="00023" />
+      <option name="presentableId" value="LOCAL-00023" />
+      <option name="project" value="LOCAL" />
+      <updated>1761214175173</updated>
+    </task>
+    <task id="LOCAL-00024" summary="027-搭建并配置RabbitMq模块">
+      <option name="closed" value="true" />
+      <created>1761221050929</created>
+      <option name="number" value="00024" />
+      <option name="presentableId" value="LOCAL-00024" />
+      <option name="project" value="LOCAL" />
+      <updated>1761221050929</updated>
+    </task>
+    <task id="LOCAL-00025" summary="028-搭建并配置ES模块">
+      <option name="closed" value="true" />
+      <created>1761221124471</created>
+      <option name="number" value="00025" />
+      <option name="presentableId" value="LOCAL-00025" />
+      <option name="project" value="LOCAL" />
+      <updated>1761221124471</updated>
+    </task>
+    <task id="LOCAL-00026" summary="029-搭建跨微服务调用模块">
+      <option name="closed" value="true" />
+      <created>1761221190311</created>
+      <option name="number" value="00026" />
+      <option name="presentableId" value="LOCAL-00026" />
+      <option name="project" value="LOCAL" />
+      <updated>1761221190311</updated>
+    </task>
+    <task id="LOCAL-00027" summary="030-完善商品管理模块">
+      <option name="closed" value="true" />
+      <created>1761222566004</created>
+      <option name="number" value="00027" />
+      <option name="presentableId" value="LOCAL-00027" />
+      <option name="project" value="LOCAL" />
+      <updated>1761222566004</updated>
+    </task>
+    <task id="LOCAL-00028" summary="031-搭建营销活动管理模块环境">
+      <option name="closed" value="true" />
+      <created>1761223503147</created>
+      <option name="number" value="00028" />
+      <option name="presentableId" value="LOCAL-00028" />
+      <option name="project" value="LOCAL" />
+      <updated>1761223503147</updated>
+    </task>
+    <task id="LOCAL-00029" summary="032-实现营销活动管理模块的营销活动功能">
+      <option name="closed" value="true" />
+      <created>1761228568197</created>
+      <option name="number" value="00029" />
+      <option name="presentableId" value="LOCAL-00029" />
+      <option name="project" value="LOCAL" />
+      <updated>1761228568198</updated>
+    </task>
+    <task id="LOCAL-00030" summary="033-实现营销活动管理模块的优惠卷功能">
+      <option name="closed" value="true" />
+      <created>1761230581245</created>
+      <option name="number" value="00030" />
+      <option name="presentableId" value="LOCAL-00030" />
+      <option name="project" value="LOCAL" />
+      <updated>1761230581245</updated>
+    </task>
+    <task id="LOCAL-00031" summary="034-引入GateWay网关模块">
+      <option name="closed" value="true" />
+      <created>1761233714481</created>
+      <option name="number" value="00031" />
+      <option name="presentableId" value="LOCAL-00031" />
+      <option name="project" value="LOCAL" />
+      <updated>1761233714481</updated>
+    </task>
+    <task id="LOCAL-00032" summary="035-搭建微信用户管理模块环境">
+      <option name="closed" value="true" />
+      <created>1761233747580</created>
+      <option name="number" value="00032" />
+      <option name="presentableId" value="LOCAL-00032" />
+      <option name="project" value="LOCAL" />
+      <updated>1761233747580</updated>
+    </task>
+    <task id="LOCAL-00033" summary="036-实现JWT工具类">
+      <option name="closed" value="true" />
+      <created>1761234412883</created>
+      <option name="number" value="00033" />
+      <option name="presentableId" value="LOCAL-00033" />
+      <option name="project" value="LOCAL" />
+      <updated>1761234412883</updated>
+    </task>
+    <task id="LOCAL-00034" summary="037-引入Redis架构和配置">
+      <option name="closed" value="true" />
+      <created>1761320878035</created>
+      <option name="number" value="00034" />
+      <option name="presentableId" value="LOCAL-00034" />
+      <option name="project" value="LOCAL" />
+      <updated>1761320878035</updated>
+    </task>
+    <task id="LOCAL-00035" summary="038-实现微信扫码授权登录功能和登录拦截器">
+      <option name="closed" value="true" />
+      <created>1761398167070</created>
+      <option name="number" value="00035" />
+      <option name="presentableId" value="LOCAL-00035" />
+      <option name="project" value="LOCAL" />
+      <updated>1761398167071</updated>
+    </task>
+    <task id="LOCAL-00036" summary="039-修复认证上下文处理器返回的参数类型不匹配问题">
+      <option name="closed" value="true" />
+      <created>1761398455840</created>
+      <option name="number" value="00036" />
+      <option name="presentableId" value="LOCAL-00036" />
+      <option name="project" value="LOCAL" />
+      <updated>1761398455840</updated>
+    </task>
+    <task id="LOCAL-00037" summary="040-实现用户昵称生成功能">
+      <option name="closed" value="true" />
+      <created>1761399472482</created>
+      <option name="number" value="00037" />
+      <option name="presentableId" value="LOCAL-00037" />
+      <option name="project" value="LOCAL" />
+      <updated>1761399472482</updated>
+    </task>
+    <task id="LOCAL-00038" summary="041-搭建首页接口模块环境">
+      <option name="closed" value="true" />
+      <created>1761400171414</created>
+      <option name="number" value="00038" />
+      <option name="presentableId" value="LOCAL-00038" />
+      <option name="project" value="LOCAL" />
+      <updated>1761400171414</updated>
+    </task>
+    <task id="LOCAL-00039" summary="0422-优化model模块包结构">
+      <option name="closed" value="true" />
+      <created>1761404457000</created>
+      <option name="number" value="00039" />
+      <option name="presentableId" value="LOCAL-00039" />
+      <option name="project" value="LOCAL" />
+      <updated>1761404457000</updated>
+    </task>
+    <task id="LOCAL-00040" summary="044-优化所有导入了model模块包的import内容">
+      <option name="closed" value="true" />
+      <created>1761404744553</created>
+      <option name="number" value="00040" />
+      <option name="presentableId" value="LOCAL-00040" />
+      <option name="project" value="LOCAL" />
+      <updated>1761404744553</updated>
+    </task>
+    <task id="LOCAL-00041" summary="045-实现小程序首页内容显示功能">
+      <option name="closed" value="true" />
+      <created>1761404768180</created>
+      <option name="number" value="00041" />
+      <option name="presentableId" value="LOCAL-00041" />
+      <option name="project" value="LOCAL" />
+      <updated>1761404768180</updated>
+    </task>
+    <task id="LOCAL-00042" summary="046-实现查询某个分类下的商品功能">
+      <option name="closed" value="true" />
+      <created>1761487492479</created>
+      <option name="number" value="00042" />
+      <option name="presentableId" value="LOCAL-00042" />
+      <option name="project" value="LOCAL" />
+      <updated>1761487492479</updated>
+    </task>
+    <task id="LOCAL-00043" summary="047-实现商品详情功能，主要通过启动多线程远程调用返回数据实现">
+      <option name="closed" value="true" />
+      <created>1761572570257</created>
+      <option name="number" value="00043" />
+      <option name="presentableId" value="LOCAL-00043" />
+      <option name="project" value="LOCAL" />
+      <updated>1761572570257</updated>
+    </task>
+    <task id="LOCAL-00044" summary="048-搭建购物车模块架构">
+      <option name="closed" value="true" />
+      <created>1761573553313</created>
+      <option name="number" value="00044" />
+      <option name="presentableId" value="LOCAL-00044" />
+      <option name="project" value="LOCAL" />
+      <updated>1761573553313</updated>
+    </task>
+    <task id="LOCAL-00045" summary="049-移除配置文件中包含敏感信息导致无法将项目代码提交到GitHub中">
+      <option name="closed" value="true" />
+      <created>1761574530667</created>
+      <option name="number" value="00045" />
+      <option name="presentableId" value="LOCAL-00045" />
+      <option name="project" value="LOCAL" />
+      <updated>1761574530667</updated>
+    </task>
+    <option name="localTasksCounter" value="46" />
+    <servers />
+  </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="3" />
+  </component>
+  <component name="VcsManagerConfiguration">
+    <MESSAGE value="024-构建商品服务模块环境" />
+    <MESSAGE value="025-引入Minio框架" />
+    <MESSAGE value="026-实现商品管理模块" />
+    <MESSAGE value="027-搭建并配置RabbitMq模块" />
+    <MESSAGE value="028-搭建并配置ES模块" />
+    <MESSAGE value="029-搭建跨微服务调用模块" />
+    <MESSAGE value="030-完善商品管理模块" />
+    <MESSAGE value="031-搭建营销活动管理模块环境" />
+    <MESSAGE value="032-实现营销活动管理模块的营销活动功能" />
+    <MESSAGE value="033-实现营销活动管理模块的优惠卷功能" />
+    <MESSAGE value="034-引入GateWay网关模块" />
+    <MESSAGE value="035-搭建微信用户管理模块环境" />
+    <MESSAGE value="036-实现JWT工具类" />
+    <MESSAGE value="037-引入Redis架构和配置" />
+    <MESSAGE value="038-实现微信扫码授权登录功能和登录拦截器" />
+    <MESSAGE value="039-修复认证上下文处理器返回的参数类型不匹配问题" />
+    <MESSAGE value="040-实现用户昵称生成功能" />
+    <MESSAGE value="041-搭建首页接口模块环境" />
+    <MESSAGE value="0422-优化model模块包结构" />
+    <MESSAGE value="044-优化所有导入了model模块包的import内容" />
+    <MESSAGE value="045-实现小程序首页内容显示功能" />
+    <MESSAGE value="046-实现查询某个分类下的商品功能" />
+    <MESSAGE value="047-实现商品详情功能，主要通过启动多线程远程调用返回数据实现" />
+    <MESSAGE value="048-搭建购物车模块架构" />
+    <MESSAGE value="049-移除配置文件中包含敏感信息导致无法将项目代码提交到GitHub中" />
+    <option name="LAST_COMMIT_MESSAGE" value="049-移除配置文件中包含敏感信息导致无法将项目代码提交到GitHub中" />
+  </component>
+</project>

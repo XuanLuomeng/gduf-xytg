@@ -3,8 +3,8 @@ package com.gduf.xytg.acl.service;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.IService;
-import com.gduf.xytg.model.acl.Admin;
-import com.gduf.xytg.vo.acl.AdminQueryVo;
+import cn.gduf.xytg.model.acl.Admin;
+import cn.gduf.xytg.vo.acl.AdminQueryVo;
 
 /**
  * @author LuoXuanwei

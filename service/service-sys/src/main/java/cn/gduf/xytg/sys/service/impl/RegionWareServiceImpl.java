@@ -8,8 +8,8 @@ import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import com.gduf.xytg.model.sys.RegionWare;
-import com.gduf.xytg.vo.sys.RegionWareQueryVo;
+import cn.gduf.xytg.model.sys.RegionWare;
+import cn.gduf.xytg.vo.sys.RegionWareQueryVo;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 

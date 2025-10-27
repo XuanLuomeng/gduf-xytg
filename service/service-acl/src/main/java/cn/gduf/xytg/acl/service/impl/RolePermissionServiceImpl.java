@@ -3,7 +3,7 @@ package com.gduf.xytg.acl.service.impl;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.gduf.xytg.acl.mapper.RolePermissionMapper;
 import com.gduf.xytg.acl.service.RolePermissionService;
-import com.gduf.xytg.model.acl.RolePermission;
+import cn.gduf.xytg.model.acl.RolePermission;
 import org.springframework.stereotype.Service;
 
 /**

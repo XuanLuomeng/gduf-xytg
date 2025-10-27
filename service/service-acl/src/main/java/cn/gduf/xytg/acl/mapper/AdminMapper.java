@@ -1,7 +1,7 @@
 package com.gduf.xytg.acl.mapper;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
-import com.gduf.xytg.model.acl.Admin;
+import cn.gduf.xytg.model.acl.Admin;
 import org.springframework.stereotype.Repository;
 
 /**

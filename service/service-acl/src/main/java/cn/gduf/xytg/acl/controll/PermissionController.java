@@ -2,13 +2,12 @@ package com.gduf.xytg.acl.controll;
 
 import cn.gduf.xytg.common.result.Result;
 import com.gduf.xytg.acl.service.PermissionService;
-import com.gduf.xytg.model.acl.Permission;
+import cn.gduf.xytg.model.acl.Permission;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /**

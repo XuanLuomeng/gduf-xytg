@@ -2,7 +2,7 @@ package cn.gduf.xytg.sys.controller;
 
 import cn.gduf.xytg.common.result.Result;
 import cn.gduf.xytg.sys.service.RegionService;
-import com.gduf.xytg.model.sys.Region;
+import cn.gduf.xytg.model.sys.Region;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
