@@ -259,4 +259,88 @@ public class CartInfoServiceImpl implements CartInfoService {
         }
         return cartInfoList;
     }
+
+    /**
+     * 选中购物车中的商品
+     *
+     * @param userId  用户ID
+     * @param skuId   商品SKU ID
+     * @param isChecked 是否选中
+     */
+    @Override
+    public void checkCart(Long userId, Long skuId, Integer isChecked) {
+        // 获取用户购物车的Redis key
+        String cartKey = this.getCartKey(userId);
+
+        // 获取购物车hash操作对象
+        BoundHashOperations<String, String, CartInfo> boundHashOperations =
+                redisTemplate.boundHashOps(cartKey);
+
+        // 查询购物车中指定商品的信息
+        CartInfo cartInfo = boundHashOperations.get(skuId.toString());
+        if (cartInfo != null) {
+            // 更新商品选中状态
+            cartInfo.setIsChecked(isChecked);
+
+            // 将更新后的商品信息保存回购物车
+            boundHashOperations.put(skuId.toString(), cartInfo);
+
+            // 重置购物车过期时间
+            this.setCartKeyExpire(cartKey);
+        }
+    }
+
+    /**
+     * 全选购物车中的商品
+     *
+     * @param userId  用户ID
+     * @param isChecked 是否选中
+     */
+    @Override
+    public void checkAllCart(Long userId, Integer isChecked) {
+        // 获取用户购物车的Redis key
+        String cartKey = this.getCartKey(userId);
+
+        // 获取购物车的hash操作对象
+        BoundHashOperations<String, String, CartInfo> boundHashOperations =
+                redisTemplate.boundHashOps(cartKey);
+
+        // 遍历购物车中所有商品，更新选中状态并保存回Redis
+        boundHashOperations.values().forEach(cartInfo -> {
+            cartInfo.setIsChecked(isChecked);
+            boundHashOperations.put(cartInfo.getSkuId().toString(), cartInfo);
+        });
+
+        // 设置购物车key的过期时间
+        this.setCartKeyExpire(cartKey);
+    }
+
+    /**
+     * 批量选中购物车中的商品
+     *
+     * @param userId  用户ID
+     * @param skuIdList 商品SKU ID列表
+     * @param isChecked 是否选中
+     */
+    @Override
+    public void batchCheckCart(Long userId, List<Long> skuIdList, Integer isChecked) {
+        // 获取购物车key
+        String cartKey = this.getCartKey(userId);
+
+        // 获取购物车hash操作对象
+        BoundHashOperations<String, String, CartInfo> boundHashOperations =
+                redisTemplate.boundHashOps(cartKey);
+
+        // 遍历SKU ID列表，批量更新选中状态
+        skuIdList.forEach(skuId -> {
+            CartInfo cartInfo = boundHashOperations.get(skuId.toString());
+            if (cartInfo != null) {
+                cartInfo.setIsChecked(isChecked);
+                boundHashOperations.put(skuId.toString(), cartInfo);
+            }
+        });
+
+        // 设置购物车key过期时间
+        this.setCartKeyExpire(cartKey);
+    }
 }

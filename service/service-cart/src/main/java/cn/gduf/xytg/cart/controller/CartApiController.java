@@ -8,6 +8,7 @@ import cn.gduf.xytg.model.order.CartInfo;
 import cn.gduf.xytg.vo.order.OrderConfirmVo;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import org.simpleframework.xml.Path;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -28,6 +29,54 @@ public class CartApiController {
 
     @Autowired
     private ActivityFeignClient activityFeignClient;
+
+    /**
+     * 购物车选中状态
+     *
+     * @param skuId  商品id
+     * @param isChecked 选中状态
+     * @return 选中结果
+     */
+    @ApiOperation("购物车选中状态")
+    @GetMapping("checkCart/{skuId}/{isChecked}")
+    public Result checkCart(@PathVariable("skuId") Long skuId,
+                            @PathVariable("isChecked") Integer isChecked){
+        Long userId = AuthContextHolder.getUserId();
+
+        cartInfoService.checkCart(userId, skuId, isChecked);
+
+       return Result.ok(null);
+    }
+
+    /**
+     * 购物车全选功能
+     *
+     * @param isChecked
+     * @return
+     */
+    @ApiOperation("购物车全选")
+    @GetMapping("checkAllCart/{isChecked}")
+    public Result checkAllCart(@PathVariable Integer isChecked) {
+        Long userId = AuthContextHolder.getUserId();
+        cartInfoService.checkAllCart(userId, isChecked);
+        return Result.ok(null);
+    }
+
+    /**
+     * 批量选中功能
+     *
+     * @param skuIdList 商品id列表
+     * @param isChecked 批量选中状态
+     * @return 批量选中结果
+     */
+    @ApiOperation("批量选中功能")
+    @PostMapping("batchCheckCart/{isChecked}")
+    public Result batchCheckCart(@RequestBody List<Long> skuIdList,
+                                 @PathVariable Integer isChecked) {
+        Long userId = AuthContextHolder.getUserId();
+        cartInfoService.batchCheckCart(userId, skuIdList, isChecked);
+        return Result.ok(null);
+    }
 
     /**
      * 获取活动购物车列表

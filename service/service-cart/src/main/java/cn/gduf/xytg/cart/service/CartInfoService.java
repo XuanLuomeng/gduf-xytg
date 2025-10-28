@@ -60,4 +60,30 @@ public interface CartInfoService {
      * @return 活动购物车列表
      */
     List<CartInfo> getCartList(Long userId);
+
+    /**
+     * 购物车选中状态
+     *
+     * @param userId  用户Id
+     * @param skuId   skuId
+     * @param isChecked 选中状态
+     */
+    void checkCart(Long userId, Long skuId, Integer isChecked);
+
+    /**
+     * 购物车全选状态
+     *
+     * @param userId  用户Id
+     * @param isChecked 选中状态
+     */
+    void checkAllCart(Long userId, Integer isChecked);
+
+    /**
+     * 批量选中状态
+     *
+     * @param userId  用户Id
+     * @param skuIdList skuId列表
+     * @param isChecked 选中状态
+     */
+    void batchCheckCart(Long userId, List<Long> skuIdList, Integer isChecked);
 }
