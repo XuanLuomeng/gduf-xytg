@@ -2,6 +2,22 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="cn.gduf.xytg.activity.mapper.ActivityInfoMapper">
     <resultMap id="ActivityRuleMap" type="cn.gduf.xytg.model.activity.ActivityRule" autoMapping="true"></resultMap>
+    <resultMap id="ActivitySkuMap" type="cn.gduf.xytg.model.activity.ActivitySku"></resultMap>
+
+    <select id="selectCartActivity" resultMap="ActivitySkuMap">
+        SELECT
+            info.id as activityId,
+            sku.sku_id as skuId,
+            FROM activity_info info
+        INNER JOIN activity_sku sku ON info.id = sku.activity_id
+        <where>
+            and sku.sku_id IN
+            <foreach collection="skuIdList" item="item" open="(" close=")" separator=",">
+                #{item}
+            </foreach>
+        </where>
+        AND now() BETWEEN info.start_time AND info.end_time
+    </select>
 
     <select id="findActivityRule" resultMap="ActivityRuleMap">
         SELECT info.activity_type as activityType,

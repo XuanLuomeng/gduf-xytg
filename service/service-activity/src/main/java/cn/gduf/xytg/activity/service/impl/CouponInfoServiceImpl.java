@@ -4,6 +4,7 @@ import cn.gduf.xytg.activity.mapper.CouponInfoMapper;
 import cn.gduf.xytg.activity.mapper.CouponRangeMapper;
 import cn.gduf.xytg.activity.service.CouponInfoService;
 import cn.gduf.xytg.client.product.ProductFeignClient;
+import cn.gduf.xytg.model.order.CartInfo;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
@@ -19,9 +20,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.math.BigDecimal;
+import java.util.*;
 import java.util.stream.Collectors;
 
 /**
@@ -169,10 +169,157 @@ public class CouponInfoServiceImpl extends ServiceImpl<CouponInfoMapper, CouponI
     public List<CouponInfo> findCouponInfoList(Long skuId, Long userId) {
         SkuInfo skuInfo = productFeignClient.getSkuInfo(skuId);
 
-        List<CouponInfo> couponInfoList =baseMapper.selectCouponInfoList(skuInfo.getId(),
+        List<CouponInfo> couponInfoList = baseMapper.selectCouponInfoList(skuInfo.getId(),
                 skuInfo.getCategoryId(),
                 userId);
 
         return couponInfoList;
     }
+
+    /**
+     * 获取购物车用户能用的优惠卷列表
+     * 根据用户的购物车商品信息和用户ID，筛选出用户可用的优惠券，并标记最优优惠券
+     *
+     * @param cartInfoList 商品信息列表，包含用户购物车中的所有商品
+     * @param userId       用户ID，用于查询该用户可用的优惠券
+     * @return 优惠券列表，包含用户所有可用优惠券，其中最优优惠券会被特殊标记
+     */
+    @Override
+    public List<CouponInfo> findCartCouponInfo(List<CartInfo> cartInfoList, Long userId) {
+        // 查询用户所有的优惠券信息
+        List<CouponInfo> userAllCouponInfoList =
+                baseMapper.selectCartCouponInfoList(userId);
+
+        // 如果用户没有优惠券，直接返回空列表
+        if (CollectionUtils.isEmpty(userAllCouponInfoList)) {
+            return new ArrayList<CouponInfo>();
+        }
+
+        // 提取所有优惠券的ID列表，用于后续查询优惠券使用范围
+        List<Long> couponIdList = userAllCouponInfoList.stream()
+                .map(couponInfo -> couponInfo.getId())
+                .collect(Collectors.toList());
+
+        // 查询这些优惠券的使用范围信息
+        LambdaQueryWrapper<CouponRange> wrapper = new LambdaQueryWrapper<>();
+        wrapper.in(CouponRange::getCouponId, couponIdList);
+
+        List<CouponRange> couponRangeList = couponRangeMapper.selectList(wrapper);
+
+        // 构建优惠券ID到SKU ID列表的映射关系，用于确定每个优惠券适用的商品范围
+        Map<Long, List<Long>> couponIdToSkuIdMap =
+                this.findCouponIdToSkuIdMap(cartInfoList, couponRangeList);
+
+        // 初始化最优优惠券的优惠金额和最优优惠券对象
+        BigDecimal reduceAmount = new BigDecimal(0);
+        CouponInfo optimalCouponInfo = null;
+
+        // 遍历用户所有优惠券，筛选可用优惠券并找出最优的一个
+        for (CouponInfo couponInfo : userAllCouponInfoList) {
+            // 判断优惠券类型：全场通用优惠券
+            if (CouponRangeType.ALL == couponInfo.getRangeType()) {
+                // 计算购物车中所有选中商品的总金额
+                BigDecimal totalAmount = this.computeTotalAmount(cartInfoList);
+                // 如果总金额满足优惠券使用条件（大于等于门槛金额），则标记该优惠券为可选
+                if (totalAmount.subtract(couponInfo.getConditionAmount()).doubleValue() >= 0) {
+                    couponInfo.setIsSelect(1); // 标记为可选
+                }
+            } else {
+                // 非全场通用优惠券（指定商品或指定分类）
+                // 获取该优惠券适用的SKU ID列表
+                List<Long> skuIdList = couponIdToSkuIdMap.get(couponInfo.getId());
+                // 筛选出购物车中属于该优惠券适用范围的商品
+                List<CartInfo> currentCartInfoList = cartInfoList.stream()
+                        .filter(cartInfo -> skuIdList.contains(cartInfo.getSkuId()))
+                        .collect(Collectors.toList());
+
+                // 计算适用范围内商品的总金额
+                BigDecimal totalAmount = this.computeTotalAmount(currentCartInfoList);
+                // 如果适用范围内商品总金额满足优惠券使用条件，标记该优惠券为可选
+                if (totalAmount.subtract(couponInfo.getConditionAmount()).doubleValue() >= 0) {
+                    couponInfo.setIsSelect(1); // 标记为可选
+                }
+            }
+
+            // 如果该优惠券可选，且其优惠金额大于当前记录的最大优惠金额，则更新最优优惠券
+            if (couponInfo.getIsSelect().intValue() == 1
+                    && couponInfo.getAmount().subtract(reduceAmount).doubleValue() > 0) {
+                reduceAmount = couponInfo.getAmount(); // 更新最大优惠金额
+                optimalCouponInfo = couponInfo; // 更新最优优惠券
+            }
+        }
+
+        // 如果找到了最优优惠券，则将其标记为最优选择
+        if (optimalCouponInfo != null) {
+            optimalCouponInfo.setIsOptimal(1); // 标记为最优优惠券
+        }
+
+        // 返回用户所有优惠券列表（包含可选状态和最优标记）
+        return userAllCouponInfoList;
+    }
+
+
+    /**
+     * 计算购物车中选中商品的总金额
+     *
+     * @param cartInfoList 购物车信息列表
+     * @return 选中商品的总金额
+     */
+    private BigDecimal computeTotalAmount(List<CartInfo> cartInfoList) {
+        BigDecimal total = new BigDecimal("0");
+        // 遍历购物车中的每个商品项
+        for (CartInfo cartInfo : cartInfoList) {
+            //是否选中
+            if (cartInfo.getIsChecked().intValue() == 1) {
+                BigDecimal itemTotal = cartInfo.getCartPrice().multiply(new BigDecimal(cartInfo.getSkuNum()));
+                total = total.add(itemTotal);
+            }
+        }
+        return total;
+    }
+
+
+    /**
+     * 根据购物车信息查询优惠券范围列表
+     *
+     * @param cartInfoList    购物车信息列表
+     * @param couponRangeList 优惠券范围列表
+     * @return 优惠券ID到SKU ID列表的映射关系
+     */
+    private Map<Long, List<Long>> findCouponIdToSkuIdMap(List<CartInfo> cartInfoList,
+                                                         List<CouponRange> couponRangeList) {
+        Map<Long, List<Long>> couponIdToSkuIdMap = new HashMap<>();
+
+        // 按优惠券ID分组优惠券范围列表
+        Map<Long, List<CouponRange>> couponRangeToRangeListMap = couponRangeList.stream().collect(
+                Collectors.groupingBy(couponRange -> couponRange.getCouponId())
+        );
+
+        Iterator<Map.Entry<Long, List<CouponRange>>> iterator =
+                couponRangeToRangeListMap.entrySet().iterator();
+
+        while (iterator.hasNext()) {
+            Map.Entry<Long, List<CouponRange>> entry = iterator.next();
+            Long couponId = entry.getKey();
+            List<CouponRange> rangeList = entry.getValue();
+
+            // 遍历购物车信息，找出符合当前优惠券范围的SKU ID集合
+            Set<Long> skuIdSet = new HashSet<>();
+            for (CartInfo cartInfo : cartInfoList) {
+                for (CouponRange couponRange : rangeList) {
+                    if (couponRange.getRangeType() == CouponRangeType.SKU
+                            && couponRange.getRangeId() == cartInfo.getSkuId().longValue()) {
+                        skuIdSet.add(cartInfo.getSkuId());
+                    } else if (couponRange.getRangeType() == CouponRangeType.CATEGORY
+                            && couponRange.getRangeId().longValue() == cartInfo.getCategoryId().longValue()) {
+                        skuIdSet.add(cartInfo.getSkuId());
+                    }
+                }
+            }
+            couponIdToSkuIdMap.put(couponId, new ArrayList<>(skuIdSet));
+        }
+
+        return couponIdToSkuIdMap;
+    }
+
 }

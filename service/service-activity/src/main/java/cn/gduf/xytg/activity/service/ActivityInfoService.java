@@ -1,6 +1,9 @@
 package cn.gduf.xytg.activity.service;
 
 import cn.gduf.xytg.model.activity.ActivityRule;
+import cn.gduf.xytg.model.order.CartInfo;
+import cn.gduf.xytg.vo.order.CartInfoVo;
+import cn.gduf.xytg.vo.order.OrderConfirmVo;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.IService;
 import cn.gduf.xytg.model.activity.ActivityInfo;
@@ -73,4 +76,21 @@ public interface ActivityInfoService extends IService<ActivityInfo> {
      * @return
      */
     List<ActivityRule> findActivityRuleBySkuId(Long skuId);
+
+    /**
+     * 获取购物车里满足条件优惠卷和活动的信息
+     *
+     * @param cartInfoList
+     * @param userId
+     * @return
+     */
+    OrderConfirmVo findCartActivityAndCoupon(List<CartInfo> cartInfoList, Long userId);
+
+    /**
+     * 获取购物车对应规则数据
+     *
+     * @param cartInfoList
+     * @return
+     */
+    List<CartInfoVo> findCartActivityList(List<CartInfo> cartInfoList);
 }

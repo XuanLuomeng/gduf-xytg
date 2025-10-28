@@ -1,6 +1,8 @@
 package cn.gduf.xytg.activity.api;
 
 import cn.gduf.xytg.activity.service.ActivityInfoService;
+import cn.gduf.xytg.model.order.CartInfo;
+import cn.gduf.xytg.vo.order.OrderConfirmVo;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,6 +23,20 @@ import java.util.Map;
 public class ActivityInfoApiController {
     @Autowired
     private ActivityInfoService activityInfoService;
+
+    /**
+     * 获取购物车满足条件优惠卷和活动的信息
+     *
+     * @param cartInfoList 购物车列表
+     * @param userId       用户Id
+     * @return OrderConfirmVo
+     */
+    @ApiOperation("获取购物车里满足条件优惠卷和活动的信息")
+    @PostMapping("inner/findCartActivityAndCoupon/{userId}")
+    public OrderConfirmVo findCartActivityAndCoupon(@PathVariable("userId") Long userId,
+                                                 @RequestBody List<CartInfo> cartInfoList) {
+        return activityInfoService.findCartActivityAndCoupon(cartInfoList, userId);
+    }
 
     /**
      * 根据skuId列表获取促销信息

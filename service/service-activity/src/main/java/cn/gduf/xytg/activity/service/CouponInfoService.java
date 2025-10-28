@@ -1,5 +1,6 @@
 package cn.gduf.xytg.activity.service;
 
+import cn.gduf.xytg.model.order.CartInfo;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.service.IService;
 import cn.gduf.xytg.model.activity.CouponInfo;
@@ -56,4 +57,13 @@ public interface CouponInfoService extends IService<CouponInfo> {
      * @return
      */
     List<CouponInfo> findCouponInfoList(Long skuId, Long userId);
+
+    /**
+     * 获取购物车用户能用的优惠卷列表
+     *
+     * @param cartInfoList
+     * @param userId
+     * @return
+     */
+    List<CouponInfo> findCartCouponInfo(List<CartInfo> cartInfoList, Long userId);
 }

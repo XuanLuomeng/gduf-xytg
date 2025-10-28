@@ -1,6 +1,7 @@
 package cn.gduf.xytg.activity.mapper;
 
 import cn.gduf.xytg.model.activity.ActivityRule;
+import cn.gduf.xytg.model.activity.ActivitySku;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import cn.gduf.xytg.model.activity.ActivityInfo;
 import org.apache.ibatis.annotations.Param;
@@ -31,4 +32,12 @@ public interface ActivityInfoMapper extends BaseMapper<ActivityInfo> {
      * @return
      */
     List<ActivityRule> findActivityRule(@Param("skuId") Long skuId);
+
+    /**
+     * 获取购物车对应活动信息
+     *
+     * @param skuIdList
+     * @return
+     */
+    List<ActivitySku> selectCartActivity(List<Long> skuIdList);
 }
