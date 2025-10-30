@@ -17,6 +17,7 @@ import org.springframework.util.StringUtils;
 
 import java.util.*;
 import java.util.concurrent.TimeUnit;
+import java.util.stream.Collectors;
 
 /**
  * @author LuoXuanwei
@@ -239,17 +240,17 @@ public class CartInfoServiceImpl implements CartInfoService {
     @Override
     public List<CartInfo> getCartList(Long userId) {
         List<CartInfo> cartInfoList = new ArrayList<>();
-        if(StringUtils.isEmpty(userId)) {
+        if (StringUtils.isEmpty(userId)) {
             return cartInfoList;
         }
         // 根据用户ID获取购物车在Redis中的key
         String cartKey = this.getCartKey(userId);
-        BoundHashOperations<String,String,CartInfo> boundHashOperations =
+        BoundHashOperations<String, String, CartInfo> boundHashOperations =
                 redisTemplate.boundHashOps(cartKey);
         // 从Redis中获取购物车所有商品信息
         cartInfoList = boundHashOperations.values();
         // 按创建时间升序排序购物车商品列表
-        if(!CollectionUtils.isEmpty(cartInfoList)) {
+        if (!CollectionUtils.isEmpty(cartInfoList)) {
             cartInfoList.sort(new Comparator<CartInfo>() {
                 @Override
                 public int compare(CartInfo o1, CartInfo o2) {
@@ -263,8 +264,8 @@ public class CartInfoServiceImpl implements CartInfoService {
     /**
      * 选中购物车中的商品
      *
-     * @param userId  用户ID
-     * @param skuId   商品SKU ID
+     * @param userId    用户ID
+     * @param skuId     商品SKU ID
      * @param isChecked 是否选中
      */
     @Override
@@ -293,7 +294,7 @@ public class CartInfoServiceImpl implements CartInfoService {
     /**
      * 全选购物车中的商品
      *
-     * @param userId  用户ID
+     * @param userId    用户ID
      * @param isChecked 是否选中
      */
     @Override
@@ -318,7 +319,7 @@ public class CartInfoServiceImpl implements CartInfoService {
     /**
      * 批量选中购物车中的商品
      *
-     * @param userId  用户ID
+     * @param userId    用户ID
      * @param skuIdList 商品SKU ID列表
      * @param isChecked 是否选中
      */
@@ -342,5 +343,58 @@ public class CartInfoServiceImpl implements CartInfoService {
 
         // 设置购物车key过期时间
         this.setCartKeyExpire(cartKey);
+    }
+
+    /**
+     * 获取用户选中的购物车列表
+     *
+     * @param userId 用户ID
+     * @return 用户选中的购物车列表
+     */
+    @Override
+    public List<CartInfo> getCartCheckedList(Long userId) {
+        // 获取用户的购物车key
+        String cartKey = this.getCartKey(userId);
+        BoundHashOperations<String, String, CartInfo> boundHashOperations =
+                redisTemplate.boundHashOps(cartKey);
+
+        // 获取购物车中所有商品信息
+        List<CartInfo> cartInfoList = boundHashOperations.values();
+
+        // 筛选出用户选中的购物车商品
+        List<CartInfo> cartInfoListNew = cartInfoList.stream()
+                .filter(cartInfo ->
+                        cartInfo.getIsChecked().intValue() == 1
+                ).collect(Collectors.toList());
+
+        return cartInfoListNew;
+    }
+
+    /**
+     * 删除用户选中的购物车商品
+     *
+     * @param userId 用户ID
+     */
+    @Override
+    public void deleteCartChecked(Long userId) {
+        // 获取用户选中的购物车商品列表
+        List<CartInfo> cartCheckedList = this.getCartCheckedList(userId);
+
+        // 提取选中商品的SKU ID列表
+        List<Long> skuIdList = cartCheckedList.stream().map(
+                cartInfo -> cartInfo.getSkuId()
+        ).collect(Collectors.toList());
+
+        // 构造用户购物车在Redis中的key
+        String cartKey = this.getCartKey(userId);
+
+        // 获取Redis中对应用户的购物车哈希操作对象
+        BoundHashOperations<String, String, CartInfo> boundHashOperations =
+                redisTemplate.boundHashOps(cartKey);
+
+        // 遍历选中的SKU ID列表，从Redis购物车中删除对应商品
+        skuIdList.forEach(skuId -> {
+            boundHashOperations.delete(skuId.toString());
+        });
     }
 }

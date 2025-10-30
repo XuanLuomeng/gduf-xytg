@@ -1,5 +1,6 @@
 package cn.gduf.xytg.product.service;
 
+import cn.gduf.xytg.vo.product.SkuStockLockVo;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.IService;
@@ -97,4 +98,13 @@ public interface SkuInfoService extends IService<SkuInfo> {
      * @return
      */
     List<SkuInfo> findNewPersonSkuInfoList();
+
+    /**
+     * 锁定库存
+     *
+     * @param skuStockLockVoList
+     * @param orderNo
+     * @return
+     */
+    Boolean checkAndLock(List<SkuStockLockVo> skuStockLockVoList, String orderNo);
 }

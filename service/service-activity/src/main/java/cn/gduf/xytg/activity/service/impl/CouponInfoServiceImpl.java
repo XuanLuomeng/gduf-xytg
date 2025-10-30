@@ -2,8 +2,11 @@ package cn.gduf.xytg.activity.service.impl;
 
 import cn.gduf.xytg.activity.mapper.CouponInfoMapper;
 import cn.gduf.xytg.activity.mapper.CouponRangeMapper;
+import cn.gduf.xytg.activity.mapper.CouponUseMapper;
 import cn.gduf.xytg.activity.service.CouponInfoService;
 import cn.gduf.xytg.client.product.ProductFeignClient;
+import cn.gduf.xytg.enums.CouponStatus;
+import cn.gduf.xytg.model.activity.CouponUse;
 import cn.gduf.xytg.model.order.CartInfo;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
@@ -37,6 +40,9 @@ public class CouponInfoServiceImpl extends ServiceImpl<CouponInfoMapper, CouponI
 
     @Autowired
     private ProductFeignClient productFeignClient;
+
+    @Autowired
+    private CouponUseMapper couponUseMapper;
 
     /**
      * 分页查询优惠卷信息
@@ -256,6 +262,58 @@ public class CouponInfoServiceImpl extends ServiceImpl<CouponInfoMapper, CouponI
 
         // 返回用户所有优惠券列表（包含可选状态和最优标记）
         return userAllCouponInfoList;
+    }
+
+    /**
+     * 根据优惠券ID和购物车信息查询优惠券范围列表
+     *
+     * @param couponId     优惠券ID
+     * @param cartInfoList 购物车信息列表
+     * @return 优惠券ID到SKU ID列表的映射关系
+     */
+    @Override
+    public CouponInfo findRangeSkuIdList(List<CartInfo> cartInfoList, Long couponId) {
+        CouponInfo couponInfo = baseMapper.selectById(couponId);
+        if (couponInfo == null) {
+            return null;
+        }
+
+        List<CouponRange> couponRangeList = couponRangeMapper.selectList(
+                new LambdaQueryWrapper<CouponRange>()
+                        .eq(CouponRange::getCouponId, couponId)
+        );
+
+        Map<Long, List<Long>> couponIdToSkuIdMap = this.findCouponIdToSkuIdMap(cartInfoList, couponRangeList);
+
+        List<Long> skuIdList = couponIdToSkuIdMap.entrySet().iterator().next().getValue();
+
+        couponInfo.setSkuIdList(skuIdList);
+
+        return couponInfo;
+    }
+
+    /**
+     * 更新优惠券使用状态
+     *
+     * @param couponId 优惠券ID
+     * @param userId   用户ID
+     * @param orderId  订单ID
+     */
+    @Override
+    public void updateCouponInfoUseStatus(Long couponId, Long userId, Long orderId) {
+        // 查询优惠券使用记录
+        CouponUse couponUse = couponUseMapper.selectOne(
+                new LambdaQueryWrapper<CouponUse>()
+                        .eq(CouponUse::getCouponId, couponId)
+                        .eq(CouponUse::getUserId, userId)
+                        .eq(CouponUse::getOrderId, orderId)
+        );
+
+        // 设置优惠券状态为已使用
+        couponUse.setCouponStatus(CouponStatus.USED);
+
+        // 更新优惠券使用状态到数据库
+        couponUseMapper.updateById(couponUse);
     }
 
 

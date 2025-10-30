@@ -1,8 +1,11 @@
 package cn.gduf.xytg.activity.client;
 
+import cn.gduf.xytg.model.activity.CouponInfo;
 import cn.gduf.xytg.model.order.CartInfo;
+import cn.gduf.xytg.vo.order.CartInfoVo;
 import cn.gduf.xytg.vo.order.OrderConfirmVo;
 import org.springframework.cloud.openfeign.FeignClient;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -49,4 +52,37 @@ public interface ActivityFeignClient {
     @PostMapping("/api/activity/inner/findActivityAndCoupon/{skuId}/{userId}")
     public Map<String, Object> findActivityAndCoupon(@PathVariable("skuId") Long skuId,
                                                      @PathVariable("userId") Long userId);
+
+    /**
+     * 获取购物车对应规则数据
+     *
+     * @param cartInfoList
+     * @return
+     */
+    @PostMapping("/api/activity/inner/findCartActivityList")
+    public List<CartInfoVo> findCartActivityList(@RequestBody List<CartInfo> cartInfoList);
+
+    /**
+     * 获取购物车对应优惠券
+     *
+     * @param cartInfoList
+     * @param couponId
+     * @return
+     */
+    @PostMapping("/api/activity/inner/findRangeSkuIdList/{couponId}")
+    public CouponInfo findRangeSkuIdList(@RequestBody List<CartInfo> cartInfoList,
+                                         @PathVariable Long couponId);
+
+    /**
+     * 更新优惠券使用状态
+     *
+     * @param couponId
+     * @param userId
+     * @param orderId
+     * @return
+     */
+    @GetMapping("/api/activity/inner/updateCouponInfoUseStatus/{couponId}/{userId}/{orderId}")
+    public Boolean updateCouponInfoUseStatus(@PathVariable("couponId") Long couponId,
+                                             @PathVariable("userId") Long userId,
+                                             @PathVariable("orderId") Long orderId);
 }

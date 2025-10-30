@@ -5,6 +5,7 @@ import cn.gduf.xytg.product.service.SkuInfoService;
 import cn.gduf.xytg.model.product.Category;
 import cn.gduf.xytg.model.product.SkuInfo;
 import cn.gduf.xytg.vo.product.SkuInfoVo;
+import cn.gduf.xytg.vo.product.SkuStockLockVo;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -117,9 +118,28 @@ public class ProductInnnerController {
         return list;
     }
 
+    /**
+     * 根据skuId获取sku信息
+     *
+     * @param skuId
+     * @return
+     */
     @ApiOperation("根据skuId获取sku信息")
     @GetMapping("inner/getSkuInfoVo/{skuId}")
     public SkuInfoVo getSkuInfoVo(@PathVariable Long skuId) {
         return skuInfoService.getSkuInfo(skuId);
+    }
+
+    /**
+     * 锁定库存
+     * @param skuStockLockVoList
+     * @param orderNo
+     * @return
+     */
+    @ApiOperation("锁定库存")
+    @PostMapping("inner/checkAndLock/{orderNo}")
+    public Boolean checkAndLock(@RequestBody List<SkuStockLockVo> skuStockLockVoList,
+                                @PathVariable String orderNo){
+        return skuInfoService.checkAndLock(skuStockLockVoList, orderNo);
     }
 }

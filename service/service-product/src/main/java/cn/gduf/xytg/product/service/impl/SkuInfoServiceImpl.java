@@ -1,12 +1,16 @@
 package cn.gduf.xytg.product.service.impl;
 
 import cn.gduf.xytg.common.constant.MqConst;
+import cn.gduf.xytg.common.constant.RedisConst;
+import cn.gduf.xytg.common.exception.XytgException;
+import cn.gduf.xytg.common.result.ResultCodeEnum;
 import cn.gduf.xytg.common.service.RabbitService;
 import cn.gduf.xytg.product.mapper.SkuInfoMapper;
 import cn.gduf.xytg.product.service.SkuAttrValueService;
 import cn.gduf.xytg.product.service.SkuImageService;
 import cn.gduf.xytg.product.service.SkuInfoService;
 import cn.gduf.xytg.product.service.SkuPosterService;
+import cn.gduf.xytg.vo.product.SkuStockLockVo;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
@@ -17,13 +21,17 @@ import cn.gduf.xytg.model.product.SkuInfo;
 import cn.gduf.xytg.model.product.SkuPoster;
 import cn.gduf.xytg.vo.product.SkuInfoQueryVo;
 import cn.gduf.xytg.vo.product.SkuInfoVo;
+import org.redisson.api.RLock;
+import org.redisson.api.RedissonClient;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
 import org.springframework.util.StringUtils;
 
+import java.math.BigDecimal;
 import java.util.Collections;
 import java.util.List;
 
@@ -49,6 +57,12 @@ public class SkuInfoServiceImpl extends ServiceImpl<SkuInfoMapper, SkuInfo> impl
 
     @Autowired
     private RabbitService rabbitService;
+
+    @Autowired
+    private RedisTemplate redisTemplate;
+
+    @Autowired
+    private RedissonClient redissonClient;
 
     /**
      * 分页查询商品信息
@@ -356,5 +370,80 @@ public class SkuInfoServiceImpl extends ServiceImpl<SkuInfoMapper, SkuInfo> impl
         List<SkuInfo> skuInfoList = baseMapper.selectPage(page, wrapper).getRecords();
 
         return skuInfoList;
+    }
+
+    /**
+     * 验证商品库存并锁定库存
+     *
+     * @param skuStockLockVoList 商品库存锁定信息列表
+     * @param orderNo            订单号
+     * @return 是否锁定成功
+     */
+    @Override
+    public Boolean checkAndLock(List<SkuStockLockVo> skuStockLockVoList, String orderNo) {
+        if (CollectionUtils.isEmpty(skuStockLockVoList)) {
+            throw new XytgException(ResultCodeEnum.DATA_ERROR);
+        }
+
+        // 验证并尝试锁定每个商品的库存
+        skuStockLockVoList.stream().forEach(skuStockLockVo -> {
+            this.checkLock(skuStockLockVo);
+        });
+
+        // 检查是否有商品库存锁定失败
+        boolean flag = skuStockLockVoList.stream()
+                .anyMatch(skuStockLockVo -> !skuStockLockVo.getIsLock());
+
+        // 如果有商品库存锁定失败，则解锁已成功锁定的商品库存，
+        // 并返回锁定失败
+        if (flag){
+            skuStockLockVoList.stream().filter(SkuStockLockVo::getIsLock)
+                    .forEach(skuStockLockVo -> {
+                        baseMapper.unlockStock(skuStockLockVo.getSkuId(),
+                                skuStockLockVo.getSkuNum());
+                    });
+            return false;
+        }
+
+        // 将库存锁定信息存储到Redis中，用于后续订单处理
+        redisTemplate.opsForValue()
+                .set(RedisConst.STOCK_INFO + orderNo,
+                        skuStockLockVoList);
+
+        return true;
+    }
+
+    /**
+     * 验证商品库存并锁定库存
+     *
+     * @param skuStockLockVo 商品库存锁定信息
+     */
+    private void checkLock(SkuStockLockVo skuStockLockVo) {
+        // 获取Redis分布式公平锁，以SKU ID作为锁的唯一标识
+        RLock rLock = this.redissonClient.getFairLock(
+                RedisConst.SKUKEY_PREFIX + skuStockLockVo.getSkuId()
+        );
+
+        rLock.lock();
+
+        try {
+            // 查询商品库存信息，验证库存是否充足
+            SkuInfo skuInfo = baseMapper.checkStock(skuStockLockVo.getSkuId(),
+                    skuStockLockVo.getSkuNum());
+            if (skuInfo == null) {
+                skuStockLockVo.setIsLock(false);
+                return;
+            }
+
+            // 执行库存锁定操作
+            Integer rows = baseMapper.lockStock(skuStockLockVo.getSkuId(),
+                    skuStockLockVo.getSkuNum());
+            if (rows == 1) {
+                skuStockLockVo.setIsLock(true);
+            }
+        } finally {
+            // 释放分布式锁
+            rLock.unlock();
+        }
     }
 }

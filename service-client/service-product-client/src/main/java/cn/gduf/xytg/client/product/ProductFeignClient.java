@@ -3,6 +3,7 @@ package cn.gduf.xytg.client.product;
 import cn.gduf.xytg.model.product.Category;
 import cn.gduf.xytg.model.product.SkuInfo;
 import cn.gduf.xytg.vo.product.SkuInfoVo;
+import cn.gduf.xytg.vo.product.SkuStockLockVo;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -88,4 +89,14 @@ public interface ProductFeignClient {
      */
     @GetMapping("/api/product/inner/getSkuInfoVo/{skuId}")
     public SkuInfoVo getSkuInfoVo(@PathVariable Long skuId);
+
+    /**
+     * 验证并锁定库存
+     * @param skuStockLockVoList
+     * @param orderNo
+     * @return
+     */
+    @PostMapping("/api/product/inner/checkAndLock/{orderNo}")
+    public Boolean checkAndLock(@RequestBody List<SkuStockLockVo> skuStockLockVoList,
+                                @PathVariable String orderNo);
 }

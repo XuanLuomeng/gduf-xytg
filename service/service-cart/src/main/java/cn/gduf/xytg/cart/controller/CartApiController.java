@@ -162,4 +162,16 @@ public class CartApiController {
         boolean res = cartInfoService.batchDeleteCart(skuIdList, userId);
         return res ? Result.ok(null) : Result.fail(null);
     }
+
+    /**
+     * 获取购物车选中商品列表
+     *
+     * @param userId 用户id
+     * @return 购物车选中商品列表
+     */
+    @ApiOperation("获取购物车选中商品列表")
+    @GetMapping("inner/getCartCheckedList/{userId}")
+    public List<CartInfo> getCartCheckedList(@PathVariable("userId") Long userId) {
+        return cartInfoService.getCartCheckedList(userId);
+    }
 }

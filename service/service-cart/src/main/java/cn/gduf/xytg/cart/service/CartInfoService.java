@@ -86,4 +86,19 @@ public interface CartInfoService {
      * @param isChecked 选中状态
      */
     void batchCheckCart(Long userId, List<Long> skuIdList, Integer isChecked);
+
+    /**
+     * 获取选中购物车列表
+     *
+     * @param userId 用户Id
+     * @return 选中购物车列表
+     */
+    List<CartInfo> getCartCheckedList(Long userId);
+
+    /**
+     * 删除选中购物车
+     *
+     * @param userId 用户Id
+     */
+    void deleteCartChecked(Long userId);
 }
