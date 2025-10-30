@@ -68,4 +68,19 @@ public class OrderInfoController {
         OrderInfo orderInfo = orderInfoService.getOrderInfoById(orderId);
         return Result.ok(orderInfo);
     }
+
+    /**
+     * 内部接口：获取订单信息
+     * 该方法用于获取订单信息，供内部服务调用
+     *
+     * @param orderNo 订单编号，用于标识要查询的订单
+     * @return OrderInfo 订单信息对象
+     */
+    @ApiOperation("获取订单信息")
+    @GetMapping("inner/getOrderInfo/{orderNo}")
+    public OrderInfo getOrderInfo(@PathVariable("orderNo") String orderNo){
+        OrderInfo orderInfo = orderInfoService.getOrderInfoByOrderNo(orderNo);
+
+        return orderInfo;
+    }
 }
