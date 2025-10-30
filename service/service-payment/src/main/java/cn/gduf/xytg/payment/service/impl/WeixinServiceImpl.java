@@ -16,6 +16,7 @@ import cn.gduf.xytg.payment.utils.ConstantPropertiesUtils;
 import org.springframework.util.StringUtils;
 
 import java.math.BigDecimal;
+import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
@@ -129,4 +130,51 @@ public class WeixinServiceImpl implements WeixinService {
         }
     }
 
+    /**
+     * 查询微信支付订单状态
+     * 该方法通过调用微信支付订单查询接口，获取指定订单的支付状态信息
+     * 主要用于检查订单是否已支付成功，支持前端轮询查询支付结果
+     *
+     * @param orderNo 订单编号，用于查询对应微信支付订单的状态
+     * @return Map<String, String> 微信支付订单状态信息，包含以下关键字段：
+     * - return_code: 返回状态码(SUCCESS/FAIL)
+     * - return_msg: 返回信息
+     * - result_code: 业务结果(SUCCESS/FAIL)
+     * - trade_state: 交易状态
+     * - trade_state_desc: 交易状态描述
+     * - out_trade_no: 商户订单号
+     * - transaction_id: 微信支付订单号
+     * - total_fee: 订单总金额(分)
+     * - time_end: 支付完成时间
+     */
+    @Override
+    public Map<String, String> queryPayStatus(String orderNo) {
+        // 组装微信订单查询接口所需参数
+        Map paramMap = new HashMap();
+        paramMap.put("appid", ConstantPropertiesUtils.APPID);        // 公众号ID
+        paramMap.put("mch_id", ConstantPropertiesUtils.PARTNER);     // 商户号
+        paramMap.put("out_trade_no", orderNo);                       // 商户订单号
+        paramMap.put("nonce_str", WXPayUtil.generateNonceStr());     // 随机字符串
+
+        // 创建HttpClient实例，用于调用微信订单查询接口
+        HttpClient client = new HttpClient("https://api.mch.weixin.qq.com/pay/orderquery");
+        try {
+            // 生成带有签名的XML请求参数
+            client.setXmlParam(WXPayUtil.generateSignedXml(paramMap, ConstantPropertiesUtils.PARTNERKEY));
+            // 设置使用HTTPS协议
+            client.setHttps(true);
+            // 发送POST请求
+            client.post();
+
+            // 获取微信订单查询接口返回的XML响应
+            String xml = client.getContent();
+            // 将XML响应转换为Map格式，便于处理返回结果
+            Map<String, String> stringMap = WXPayUtil.xmlToMap(xml);
+            // 返回订单状态信息
+            return stringMap;
+        } catch (Exception e) {
+            // 异常处理，抛出运行时异常
+            throw new RuntimeException(e);
+        }
+    }
 }

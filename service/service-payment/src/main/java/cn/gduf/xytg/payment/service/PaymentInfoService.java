@@ -1,8 +1,11 @@
 package cn.gduf.xytg.payment.service;
 
+import cn.gduf.xytg.common.result.Result;
 import cn.gduf.xytg.enums.PaymentType;
 import cn.gduf.xytg.model.order.PaymentInfo;
 import com.baomidou.mybatisplus.extension.service.IService;
+
+import java.util.Map;
 
 /**
  * @author LuoXuanwei
@@ -28,4 +31,20 @@ public interface PaymentInfoService extends IService<PaymentInfo> {
      * @return
      */
     PaymentInfo savePaymentInfo(String orderNo, PaymentType paymentType);
+
+    /**
+     * 支付成功
+     *
+     * @param outTradeNo
+     * @param resultMap
+     */
+    void paySuccess(String outTradeNo, Map<String, String> resultMap);
+
+    /**
+     * 取消订单
+     *
+     * @param orderNo
+     * @return
+     */
+    boolean cancelOrder(String orderNo);
 }

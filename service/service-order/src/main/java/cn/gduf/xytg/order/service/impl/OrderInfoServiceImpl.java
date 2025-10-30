@@ -473,6 +473,29 @@ public class OrderInfoServiceImpl extends ServiceImpl<OrderInfoMapper, OrderInfo
     }
 
     /**
+     * 取消订单
+     *
+     * @param orderNo 订单编号
+     */
+    @Override
+    public void cancelOrder(String orderNo) {
+        // 获取订单信息
+        OrderInfo orderInfo = this.getOrderInfoByOrderNo(orderNo);
+        // 验证订单是否存在且状态为取消状态
+        if (orderInfo == null || orderInfo.getOrderStatus() != OrderStatus.CANCEL) {
+            return;
+        }
+        // 更新订单状态
+        this.updateOrderStatus(orderInfo.getId());
+
+        // 发送消息到MQ，回滚库存
+        rabbitService.sendMessage(MqConst.EXCHANGE_CANCEL_ORDER_DIRECT,
+                MqConst.ROUTING_ROLLBACK_STOCK,
+                orderNo);
+    }
+
+
+    /**
      * 更新订单状态为待发货状态
      *
      * @param id 订单主键ID

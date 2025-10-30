@@ -3,12 +3,15 @@
 <mapper namespace="cn.gduf.xytg.product.mapper.SkuInfoMapper">
     <resultMap id="skuInfoMap" type="cn.gduf.xytg.model.product.SkuInfo" autoMapping="true"></resultMap>
 
+    <!--增加锁定库存数-->
     <update id="lockStock">
         UPDATE
             sku_info
         SET lock_stock = lock_stock + #{skuNum}
         WHERE id = #{skuId}
     </update>
+
+    <!--解锁库存数-->
     <update id="unlockStock">
         UPDATE
             sku_info
@@ -16,14 +19,50 @@
         WHERE id = #{skuId}
     </update>
 
-    <select id="checkStock" resultMap="skuInfoMap">
-        SELECT
-            id,category_id,sku_type,sku_name,img_url,per_limit,publish_status,
-            check_status,is_new_person,sort,sku_code,price,market_price,stock,
-            lock_stock,low_stock,sale,ware_id,create_time,update_time,is_deleted
-        FROM
+    <!--减库存数-->
+    <update id="minusStock">
+        UPDATE
             sku_info
-        WHERE id = #{skuId} and stock-lock_stock >= #{skuNum} FOR UPDATE
+        SET stock      = stock - #{skuNum},
+            lock_stock = lock_stock - #{skuNum},
+            sale       = sale + #{skuNum}
+        WHERE id = #{skuId}
+    </update>
+
+    <!--恢复库存数-->
+    <update id="rollbackStock">
+        UPDATE
+            sku_info
+        SET lock_stock = lock_stock - #{skuNum}
+        WHERE id = #{skuId}
+    </update>
+
+    <!--检查库存锁定状态-->
+    <select id="checkStock" resultMap="skuInfoMap">
+        SELECT id,
+               category_id,
+               sku_type,
+               sku_name,
+               img_url,
+               per_limit,
+               publish_status,
+               check_status,
+               is_new_person,
+               sort,
+               sku_code,
+               price,
+               market_price,
+               stock,
+               lock_stock,
+               low_stock,
+               sale,
+               ware_id,
+               create_time,
+               update_time,
+               is_deleted
+        FROM sku_info
+        WHERE id = #{skuId}
+          and stock - lock_stock >= #{skuNum} FOR UPDATE
     </select>
 
 </mapper>

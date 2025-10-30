@@ -62,4 +62,10 @@ public interface OrderInfoService extends IService<OrderInfo> {
      */
     public IPage<OrderInfo> getOrderInfoByUserIdPage(Page<OrderInfo> pageParam,
                                                      OrderUserQueryVo orderUserQueryVo);
+    /**
+     * 取消订单
+     *
+     * @param orderNo
+     */
+    void cancelOrder(String orderNo);
 }

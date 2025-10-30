@@ -6,8 +6,12 @@ import cn.gduf.xytg.model.order.OrderInfo;
 import cn.gduf.xytg.order.service.OrderInfoService;
 import cn.gduf.xytg.vo.order.OrderConfirmVo;
 import cn.gduf.xytg.vo.order.OrderSubmitVo;
+import cn.gduf.xytg.vo.order.OrderUserQueryVo;
+import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiParam;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -25,6 +29,32 @@ import javax.servlet.http.HttpServletRequest;
 public class OrderInfoController {
     @Autowired
     private OrderInfoService orderInfoService;
+
+    /**
+     * 根据用户ID分页查询订单信息
+     *
+     * @param page             当前页码
+     * @param limit            每页记录数
+     * @param orderUserQueryVo 查询条件对象
+     * @return 分页订单信息结果
+     */
+    @GetMapping("auth/findUserOrderPage/{page}/{limit}")
+    public Result findUserOrderPage(
+            @ApiParam(name = "page", value = "当前页码", required = true)
+            @PathVariable Long page,
+            @ApiParam(name = "limit", value = "每页记录数", required = true)
+            @PathVariable Long limit,
+            @ApiParam(name = "orderVo", value = "查询对象", required = false)
+            OrderUserQueryVo orderUserQueryVo) {
+        // 获取当前登录用户ID
+        Long userId = AuthContextHolder.getUserId();
+        orderUserQueryVo.setUserId(userId);
+
+        // 构造分页参数并执行查询
+        Page<OrderInfo> pageParam = new Page<>(page, limit);
+        IPage<OrderInfo> pageModel = orderInfoService.getOrderInfoByUserIdPage(pageParam, orderUserQueryVo);
+        return Result.ok(pageModel);
+    }
 
     /**
      * 确认订单
@@ -78,7 +108,7 @@ public class OrderInfoController {
      */
     @ApiOperation("获取订单信息")
     @GetMapping("inner/getOrderInfo/{orderNo}")
-    public OrderInfo getOrderInfo(@PathVariable("orderNo") String orderNo){
+    public OrderInfo getOrderInfo(@PathVariable("orderNo") String orderNo) {
         OrderInfo orderInfo = orderInfoService.getOrderInfoByOrderNo(orderNo);
 
         return orderInfo;

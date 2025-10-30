@@ -52,6 +52,7 @@ public class MqConst {
     public static final String QUEUE_LEADER_BILL  = "xytg.leader.bill";
 
     //取消订单
+    public static final String ROUTING_PAY_CANCEL = "xytg.pay.cancel";
     public static final String EXCHANGE_CANCEL_ORDER_DIRECT = "xytg.cancel.order.direct";
     public static final String ROUTING_CANCEL_ORDER = "xytg.cancel.order";
     //延迟取消订单队列

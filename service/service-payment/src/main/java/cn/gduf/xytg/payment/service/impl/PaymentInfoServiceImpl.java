@@ -1,7 +1,10 @@
 package cn.gduf.xytg.payment.service.impl;
 
+import cn.gduf.xytg.common.constant.MqConst;
 import cn.gduf.xytg.common.exception.XytgException;
+import cn.gduf.xytg.common.result.Result;
 import cn.gduf.xytg.common.result.ResultCodeEnum;
+import cn.gduf.xytg.common.service.RabbitService;
 import cn.gduf.xytg.enums.PaymentStatus;
 import cn.gduf.xytg.enums.PaymentType;
 import cn.gduf.xytg.model.order.OrderInfo;
@@ -15,6 +18,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.Date;
+import java.util.Map;
 
 /**
  * @author LuoXuanwei
@@ -26,6 +30,9 @@ import java.util.Date;
 public class PaymentInfoServiceImpl extends ServiceImpl<PaymentInfoMapper, PaymentInfo> implements PaymentInfoService {
     @Autowired
     private OrderFeignClient orderFeignClient;
+
+    @Autowired
+    private RabbitService rabbitService;
 
     /**
      * 根据订单编号和支付类型查询支付信息
@@ -71,5 +78,60 @@ public class PaymentInfoServiceImpl extends ServiceImpl<PaymentInfoMapper, Payme
 
         baseMapper.insert(paymentInfo);
         return paymentInfo;
+    }
+
+    /**
+     * 支付成功
+     *
+     * @param outTradeNo 订单编号
+     * @param resultMap  支付结果
+     */
+    @Override
+    public void paySuccess(String outTradeNo, Map<String, String> resultMap) {
+        // 查询支付信息
+        PaymentInfo paymentInfo = baseMapper.selectOne(
+                new LambdaQueryWrapper<PaymentInfo>()
+                        .eq(PaymentInfo::getOrderNo, outTradeNo)
+        );
+
+        // 如果支付状态不是未支付，则直接返回
+        if (paymentInfo.getPaymentStatus() != PaymentStatus.UNPAID) {
+            return;
+        }
+
+        // 更新支付信息状态
+        paymentInfo.setPaymentStatus(PaymentStatus.PAID);
+        paymentInfo.setTradeNo(resultMap.get("transaction_id"));
+        paymentInfo.setCallbackContent(resultMap.toString());
+        baseMapper.updateById(paymentInfo);
+
+        // 发送支付成功消息到消息队列（减库存）
+        rabbitService.sendMessage(MqConst.EXCHANGE_PAY_DIRECT,
+                MqConst.ROUTING_PAY_SUCCESS, outTradeNo);
+    }
+
+    /**
+     * 取消订单
+     *
+     * @param orderNo 订单编号
+     * @return 订单取消结果，取消成功返回true，否则返回false
+     */
+    @Override
+    public boolean cancelOrder(String orderNo) {
+        // 查询订单支付信息
+        PaymentInfo paymentInfo = baseMapper.selectOne(
+                new LambdaQueryWrapper<PaymentInfo>()
+                        .eq(PaymentInfo::getOrderNo, orderNo)
+        );
+
+        // 只有未支付的订单才能取消，并发送取消订单消息到消息队列
+        if (paymentInfo != null && paymentInfo.getPaymentStatus() == PaymentStatus.UNPAID) {
+            // 发送取消订单消息到消息队列
+            rabbitService.sendMessage(MqConst.EXCHANGE_CANCEL_ORDER_DIRECT,
+                    MqConst.ROUTING_PAY_CANCEL, orderNo);
+            return true;
+        }
+
+        return false;
     }
 }

@@ -107,4 +107,18 @@ public interface SkuInfoService extends IService<SkuInfo> {
      * @return
      */
     Boolean checkAndLock(List<SkuStockLockVo> skuStockLockVoList, String orderNo);
+
+    /**
+     * 减库存
+     *
+     * @param orderNo
+     */
+    void minusStock(String orderNo);
+
+    /**
+     * 恢复库存
+     *
+     * @param orderNo
+     */
+    void rollbackStock(String orderNo);
 }

@@ -31,8 +31,6 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
 import org.springframework.util.StringUtils;
 
-import java.math.BigDecimal;
-import java.util.Collections;
 import java.util.List;
 
 /**
@@ -81,15 +79,15 @@ public class SkuInfoServiceImpl extends ServiceImpl<SkuInfoMapper, SkuInfo> impl
         LambdaQueryWrapper<SkuInfo> wrapper = new LambdaQueryWrapper<>();
 
         // 封装查询条件，防止输入空格
-        if (!StringUtils.isEmpty(keyword)){
+        if (!StringUtils.isEmpty(keyword)) {
             wrapper.like(SkuInfo::getSkuName, keyword);
         }
 
-        if (!StringUtils.isEmpty(categoryId)){
+        if (!StringUtils.isEmpty(categoryId)) {
             wrapper.eq(SkuInfo::getCategoryId, categoryId);
         }
 
-        if (!StringUtils.isEmpty(skuType)){
+        if (!StringUtils.isEmpty(skuType)) {
             wrapper.eq(SkuInfo::getSkuType, skuType);
         }
 
@@ -116,7 +114,7 @@ public class SkuInfoServiceImpl extends ServiceImpl<SkuInfoMapper, SkuInfo> impl
         List<SkuPoster> skuPosterList = skuInfoVo.getSkuPosterList();
         boolean savePosters = false;
         // 判断海报列表是否为空
-        if (!CollectionUtils.isEmpty(skuPosterList)){
+        if (!CollectionUtils.isEmpty(skuPosterList)) {
             // 遍历海报列表，设置商品id，因为在保存商品信息之后，才能拿到商品id
             for (SkuPoster skuPoster : skuPosterList) {
                 skuPoster.setSkuId(skuInfo.getId());
@@ -127,7 +125,7 @@ public class SkuInfoServiceImpl extends ServiceImpl<SkuInfoMapper, SkuInfo> impl
         // 保存商品图片
         List<SkuImage> skuImageList = skuInfoVo.getSkuImagesList();
         boolean saveImages = false;
-        if (!CollectionUtils.isEmpty(skuImageList)){
+        if (!CollectionUtils.isEmpty(skuImageList)) {
             // 遍历图片列表，设置商品id
             for (SkuImage skuImage : skuImageList) {
                 skuImage.setSkuId(skuInfo.getId());
@@ -138,7 +136,7 @@ public class SkuInfoServiceImpl extends ServiceImpl<SkuInfoMapper, SkuInfo> impl
         // 保存商品平台属性
         List<SkuAttrValue> skuAttrValueList = skuInfoVo.getSkuAttrValueList();
         boolean saveAttrValues = false;
-        if (!CollectionUtils.isEmpty(skuAttrValueList)){
+        if (!CollectionUtils.isEmpty(skuAttrValueList)) {
             // 遍历属性列表，设置商品id
             for (SkuAttrValue skuAttrValue : skuAttrValueList) {
                 skuAttrValue.setSkuId(skuInfo.getId());
@@ -203,7 +201,7 @@ public class SkuInfoServiceImpl extends ServiceImpl<SkuInfoMapper, SkuInfo> impl
         boolean updateAttrValues = false;
 
         // 修改商品信息成功后，再修改商品图片、海报、属性
-        if (updateSkuInfo){
+        if (updateSkuInfo) {
             // 海报
             // 删除所有海报
             LambdaQueryWrapper<SkuPoster> wrapperPoster = new LambdaQueryWrapper<>();
@@ -212,11 +210,11 @@ public class SkuInfoServiceImpl extends ServiceImpl<SkuInfoMapper, SkuInfo> impl
 
             // 添加所有海报
             List<SkuPoster> skuPosterList = skuInfoVo.getSkuPosterList();
-            if (!CollectionUtils.isEmpty(skuPosterList)){
+            if (!CollectionUtils.isEmpty(skuPosterList)) {
                 for (SkuPoster skuPoster : skuPosterList) {
                     skuPoster.setSkuId(skuId);
                 }
-               updatePosters = skuPosterService.saveBatch(skuPosterList) && removePoster;
+                updatePosters = skuPosterService.saveBatch(skuPosterList) && removePoster;
             }
 
             // 图片
@@ -227,7 +225,7 @@ public class SkuInfoServiceImpl extends ServiceImpl<SkuInfoMapper, SkuInfo> impl
 
             // 添加所有图片
             List<SkuImage> skuImageList = skuInfoVo.getSkuImagesList();
-            if (!CollectionUtils.isEmpty(skuImageList)){
+            if (!CollectionUtils.isEmpty(skuImageList)) {
                 for (SkuImage skuImage : skuImageList) {
                     skuImage.setSkuId(skuId);
                 }
@@ -242,7 +240,7 @@ public class SkuInfoServiceImpl extends ServiceImpl<SkuInfoMapper, SkuInfo> impl
 
             // 添加所有属性
             List<SkuAttrValue> skuAttrValueList = skuInfoVo.getSkuAttrValueList();
-            if (!CollectionUtils.isEmpty(skuAttrValueList)){
+            if (!CollectionUtils.isEmpty(skuAttrValueList)) {
                 for (SkuAttrValue skuAttrValue : skuAttrValueList) {
                     skuAttrValue.setSkuId(skuId);
                 }
@@ -396,7 +394,7 @@ public class SkuInfoServiceImpl extends ServiceImpl<SkuInfoMapper, SkuInfo> impl
 
         // 如果有商品库存锁定失败，则解锁已成功锁定的商品库存，
         // 并返回锁定失败
-        if (flag){
+        if (flag) {
             skuStockLockVoList.stream().filter(SkuStockLockVo::getIsLock)
                     .forEach(skuStockLockVo -> {
                         baseMapper.unlockStock(skuStockLockVo.getSkuId(),
@@ -412,6 +410,59 @@ public class SkuInfoServiceImpl extends ServiceImpl<SkuInfoMapper, SkuInfo> impl
 
         return true;
     }
+
+    /**
+     * 减库存
+     *
+     * @param orderNo 订单号
+     */
+    @Override
+    public void minusStock(String orderNo) {
+        // 从Redis中获取订单对应的库存锁定信息
+        List<SkuStockLockVo> skuStockLockVoList =
+                (List<SkuStockLockVo>) redisTemplate.opsForValue()
+                        .get(RedisConst.STOCK_INFO + orderNo);
+
+        // 如果没有找到库存锁定信息，则直接返回
+        if (CollectionUtils.isEmpty(skuStockLockVoList)) {
+            return;
+        }
+
+        // 遍历库存锁定信息，逐个减少对应商品的库存
+        skuStockLockVoList.forEach(skuStockLockVo -> {
+            baseMapper.minusStock(skuStockLockVo.getSkuId(), skuStockLockVo.getSkuNum());
+        });
+
+        // 删除Redis中的库存锁定信息
+        redisTemplate.delete(RedisConst.STOCK_INFO + orderNo);
+    }
+
+    /**
+     * 恢复库存
+     *
+     * @param orderNo 订单号
+     */
+    @Override
+    public void rollbackStock(String orderNo) {
+        // 从Redis中获取订单对应的库存锁定信息
+        List<SkuStockLockVo> skuStockLockVoList =
+                (List<SkuStockLockVo>) redisTemplate.opsForValue()
+                        .get(RedisConst.STOCK_INFO + orderNo);
+
+        // 如果没有找到库存锁定信息，则直接返回
+        if (CollectionUtils.isEmpty(skuStockLockVoList)) {
+            return;
+        }
+
+        // 遍历库存锁定信息，逐个减少对应商品的库存
+        skuStockLockVoList.forEach(skuStockLockVo -> {
+            baseMapper.rollbackStock(skuStockLockVo.getSkuId(), skuStockLockVo.getSkuNum());
+        });
+
+        // 删除Redis中的库存锁定信息
+        redisTemplate.delete(RedisConst.STOCK_INFO + orderNo);
+    }
+
 
     /**
      * 验证商品库存并锁定库存

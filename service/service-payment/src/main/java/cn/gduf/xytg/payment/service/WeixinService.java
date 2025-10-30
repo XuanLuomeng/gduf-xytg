@@ -16,4 +16,12 @@ public interface WeixinService {
      * @return
      */
     Map<String, String> createJsapi(String orderNo);
+
+    /**
+     * 查询支付状态
+     *
+     * @param orderNo
+     * @return
+     */
+    Map<String, String> queryPayStatus(String orderNo);
 }
